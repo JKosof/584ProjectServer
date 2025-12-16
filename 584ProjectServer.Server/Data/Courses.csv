@@ -1,0 +1,34 @@
+courseName,credits,courseNumber,deptName,deptCode
+Advanced Web Engineering,4,584,Computer Science,CS
+Web Engineering,4,384,Computer Science,CS
+Film History,2,212,Art & Media,AM
+Finance,2,105,Business,BS
+Thermodynamic Studies,4,323,Engineering,EN
+Calculus I,4,105,Math,MA
+Calculus II,4,205,Math,MA
+2D Foundations,4,110,Art & Media,AM
+3D Foundations,4,112,Art & Media,AM
+2D Animation,4,210,Art & Media,AM
+3D Animation,4,312,Art & Media,AM
+Advanced Computation Theory,4,615,Computer Science,CS
+Resume Building,1,158,Business,BS
+Intro to Psychology,4,101,Psychology,BS
+Computer Science Fundamentals,4,101,Computer Science,CS
+Portfolio Building,1,158,Art & Media,AM
+Computation Theory,4,315,Computer Science,CS
+Introduction to Writing,2,101,English and Literature,EL
+Literary Analysis,4,195,English and Literature,EL
+Worldbuilding,2,287,English and Literature,EL
+Macroeconomics,4,201,Business,BS
+Microeconomics,4,101,Business,BS
+Linear Algebra,4,152,Math,MA
+Math for Games,4,334,Math,MA
+History of Espionage,2,255,Social Sciences,SS
+Intro to Anthropology,2,101,Social Sciences,SS
+Archaeology,8,520,Social Sciences,SS
+Intro to Physics,4,102,Engineering,EN
+Intro to Chemistry,4,103,Engineering,EN
+Chemical Engineering,4,303,Engineering,EN
+Human Subjects Research,2,201,Psychology,BS
+Computer Graphics,4,362,Computer Science,CS
+Cinematography,2,245,Art & Media,AM
