@@ -52,6 +52,25 @@ builder.Services.AddScoped<JwtHandler>();
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
+    OpenApiSecurityScheme securitySceme = new()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = JwtBearerDefaults.AuthenticationScheme,
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Enter JWT Bearer Token Only",
+        Reference = new OpenApiReference
+        {
+            Type = ReferenceType.SecurityScheme,
+            Id = JwtBearerDefaults.AuthenticationScheme
+        }
+    };
+    c.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securitySceme);
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        { securitySceme, Array.Empty<string>() }
+    });
 });
 
 builder.Services.AddControllers(

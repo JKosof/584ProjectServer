@@ -114,6 +114,7 @@ namespace _584ProjectServer.Server.Controllers
                 
                 foreach (var course in selectedCourses)
                 {
+                    _context.Courses.Attach(course);
                     professor.Courses.Add(course);
                 }
             }
@@ -135,6 +136,94 @@ namespace _584ProjectServer.Server.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPut("bulkupdate")]
+        [Authorize]
+        public async Task<IActionResult> BulkUpdate()
+        {
+            var professors = await _context.Professors.Include(professor => professor.Courses).ToListAsync();
+            //update all professors' workload status based on total credits of their courses
+            //if professor is part-time, their workload counts as one tier higher
+            foreach (var professor in professors)
+            {
+                int totalCredits = professor.Courses?.Sum(c => c.Credits) ?? 0;
+                if (totalCredits <= 6)
+                {
+                    professor.WorkloadStatus = professor.PartTime ? "Heavy Schedule" : "Light Schedule";
+                }
+                else if (totalCredits <= 12)
+                {
+                    professor.WorkloadStatus = professor.PartTime ? "Burnout!" : "Heavy Schedule";
+                }
+                else
+                {
+                    professor.WorkloadStatus = "Burnout!";
+                }
+            }
+            //await _context.SaveChangesAsync();
+
+            var courses = await _context.Courses.Include(course => course.Professors).ToListAsync();
+            //update all courses' availability based on total workload of their professors relative to credits
+            //workload counts for double if professor is in same department as course
+            foreach (var course in courses)
+            {
+                int totalWorkPower = 0;
+                if (course.Professors != null)
+                {
+                    foreach (var prof in course.Professors)
+                    {
+                        if (prof.DepartmentId == course.DepartmentId)
+                        {
+                            if (prof.WorkloadStatus == "Light Schedule")
+                            {
+                                totalWorkPower += 4;
+                            }
+                            else if (prof.WorkloadStatus == "Heavy Schedule")
+                            {
+                                totalWorkPower += 2;
+                            }
+                            else if (prof.WorkloadStatus == "Burnout!")
+                            {
+                                totalWorkPower += 0;
+                            }
+                        }
+                        else
+                        {
+                            if (prof.WorkloadStatus == "Light Schedule")
+                            {
+                                totalWorkPower += 2;
+                            }
+                            else if (prof.WorkloadStatus == "Heavy Schedule")
+                            {
+                                totalWorkPower += 1;
+                            }
+                            else if (prof.WorkloadStatus == "Burnout!")
+                            {
+                                totalWorkPower += 0;
+                            }
+                        }
+                    }
+                    if (totalWorkPower == 0)
+                    {
+                        course.Availability = "Unavailable";
+                    }
+                    else if (totalWorkPower <= course.Credits)
+                    {
+                        course.Availability = "Rare";
+                    }
+                    else if (totalWorkPower <= course.Credits * 2)
+                    {
+                        course.Availability = "Limited";
+                    }
+                    else
+                    {
+                        course.Availability = "Full";
+                    }
+                }
+            }
+            await _context.SaveChangesAsync();
+            return Ok();
         }
 
         // POST: api/Professors
